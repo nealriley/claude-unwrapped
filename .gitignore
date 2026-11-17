@@ -17,3 +17,6 @@ __pycache__/
 .prepare.lock
 .server.json
 .server.log
+/.cache/
+/gallery/
+/experiences/

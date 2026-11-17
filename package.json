@@ -6,7 +6,10 @@
     "build": "node build.mjs",
     "capture": "node capture-search.mjs",
     "start": "node scripts/prepare.mjs --open",
-    "package:skill": "python3 scripts/package.py"
+    "package:skill": "python3 scripts/package.py",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "check:assets": "npm run build && git diff --exit-code -- skills/context-gallery/assets"
   },
   "devDependencies": {
     "@fontsource/geist": "5.2.6",
@@ -16,5 +19,6 @@
   },
   "dependencies": {
     "gpucanvas": "0.4.5"
-  }
+  },
+  "version": "0.1.0"
 }

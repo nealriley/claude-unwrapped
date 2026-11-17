@@ -211,6 +211,7 @@ async function go(index) {
 async function start() {
   el('capture-count').textContent=number.format(images.length)+' stored screenshots from '+number.format(attempted)+' attempts · '+number.format(eligible)+' eligible public search results'
   if (!images.length) {
+    el('empty').textContent=eligible ? 'No screenshots were captured · '+number.format(eligible)+' eligible search results. See the capture status returned by Claude.' : 'This export has no eligible public search results.'
     el('empty').hidden=false
     el('renderer').textContent='No local captures'
     el('seek').disabled=true

@@ -2,7 +2,7 @@
 
 [Design decisions and code examples](design-guide.md) · [Experience backlog](experiences.md)
 
-The gallery opens My AI Vocabulary and Search Filmstrip. The skill generates both experiences from a local Claude export and serves them through a loopback-only viewer.
+The gallery opens My AI Vocabulary and Search Filmstrip. The skill generates both experiences from a supplied Claude export. Desktop and Cowork deliver a downloadable gallery. Direct local execution serves data through a loopback viewer.
 
 ## Run locally
 
@@ -14,7 +14,7 @@ node /absolute/path/to/context-gallery/scripts/prepare.mjs --open --capture
 
 It discovers a compatible export, or creates and opens an exports folder along with Claude's export settings. Once an export is present, data, captures, and experiences are generated under the local claude-context-art workspace. The runner returns a browser URL. Omit --capture to reuse saved screenshots.
 
-The generated experiences fetch their JSON from the adjacent data folder. The local viewer keeps these paths available. For the original standalone workflow, npm run build in the source directory reads the category ZIPs in its parent directory and embeds data into HTML.
+The generated experiences fetch their JSON from the adjacent data folder. The local viewer keeps these paths available. Use --mode=artifact with an explicit --export and --workspace to generate the downloadable gallery. npm run build compiles reusable templates into the skill package.
 
 ## Source guide
 
@@ -23,7 +23,7 @@ The generated experiences fetch their JSON from the adjacent data folder. The lo
 | src/gallery.html | Gallery cards, hash navigation, and one mounted experience |
 | src/word-pulse.js | Word mosaic, camera controls, opening tiles, and video recording |
 | src/search-filmstrip.js | Screenshot playback and chronological navigation |
-| src/claude_export.py | Single-file and category-part Claude export reader |
+| skills/context-gallery/scripts/claude_export.py | Single-file and category-part Claude export reader |
 | scripts/prepare.mjs | Discovery, import, build, local viewer, and opening Chrome |
 | build.mjs | Gallery and experience HTML generation |
 | capture-search.mjs | Public-page screenshots in independent Chrome contexts |

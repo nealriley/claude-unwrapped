@@ -1,0 +1,17 @@
+{
+  "name": "claude-unwrapped",
+  "owner": {
+    "name": "Neal Riley"
+  },
+  "metadata": {
+    "description": "Claude export experiences",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "agent-unwrapped",
+      "source": "./",
+      "description": "Build a downloadable gallery from your Claude export."
+    }
+  ]
+}
