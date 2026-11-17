@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; base-uri 'none'; form-action 'none'">
+<title>Search Filmstrip · Claude Context</title>
+<style>
+/*FONTS*/
+/*GPU-STYLES*/
+:root{--mint:#f2bf87;--bg:#201a21;--panel:#2c2229;--line:#594652;--muted:#c8b8be;--ink:#fff1df}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:12px}
+.field{height:clamp(350px,62vh,710px);position:relative;isolation:isolate;background:#19151c}
+#gpu{position:absolute;inset:0}
+#film-cover{position:absolute;inset:0;overflow:hidden;background:#1c171e;pointer-events:none}
+#film-cover .frame-visual{position:absolute;top:0;left:0;transform-origin:0 0}
+.frame-visual{width:100%;height:100%;display:grid;grid-template-rows:40px minmax(0,1fr);background:#e4dacd;color:#201923;border:2px solid #d5aa88;border-radius:12px;overflow:hidden}
+.frame-bar{background:#342830;color:#ffdbc6;display:flex;align-items:center;justify-content:space-between;padding:0 13px;gap:10px;font:15px var(--mono)}
+.frame-bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.frame-visual img{width:100%;height:100%;display:block;object-fit:contain;background:#fff}
+.frame-note{color:var(--muted);padding:8px 12px 10px;border-top:1px solid var(--line);font-size:12px}
+.info{padding:12px 13px;border-bottom:1px solid var(--line)}
+.info h2{margin:4px 0;font-size:23px;overflow-wrap:anywhere}
+.info small{color:var(--muted)}
+.info .action{display:inline-block;margin-top:10px}
+.frames{height:clamp(180px,46vh,530px);overflow:auto;padding:0 7px 8px;scrollbar-color:#765665 transparent}
+.item{width:100%;border-radius:4px;border:0;border-bottom:1px solid #ffffff10;background:transparent;text-align:left;display:block;padding:7px 5px}
+.item[aria-current=true]{background:#533e47;border-left:2px solid var(--mint)}
+.item span,.item small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item small{color:var(--muted)}
+.controls .frame-count{color:var(--muted)}
+.empty{position:absolute;inset:45% 0 auto;pointer-events:none;text-align:center;color:var(--muted);z-index:2}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.frames{height:220px}.field{height:clamp(330px,56vh,550px)}}
+</style>
+</head>
+<body>
+<main class="immersive">
+  <h1 class="sr-only">Search Filmstrip</h1>
+  <div class="workspace">
+    <section class="shell canvas-shell" aria-label="Screenshot playback">
+      <div class="field" id="field"><div id="gpu"></div><div id="film-cover" aria-hidden="true" hidden></div><p id="empty" class="empty" hidden>No screenshots are stored yet.</p><p class="error" id="surface-error" hidden>The canvas could not start in this browser.</p></div>
+    </section>
+    <div class="overlay-controls"><button class="primary" id="play" type="button" disabled>Play</button><button id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings">Settings</button></div>
+    <aside class="shell settings-panel" id="settings" aria-label="Screenshot settings" hidden>
+      <div class="settings-head"><div><h2>Search Filmstrip</h2><small id="renderer" aria-live="polite">Starting GPUCanvas…</small></div><button type="button" id="fullscreen">Full screen</button></div>
+      <div class="controls">
+        <button id="previous" type="button" disabled>Previous</button><button id="next" type="button" disabled>Next</button>
+        <label class="mono">Hold <select id="pace" aria-label="Time per screenshot"><option value="1800">1.8 sec</option><option value="3500" selected>3.5 sec</option><option value="6500">6.5 sec</option></select></label>
+        <button id="fit" class="far" type="button" disabled>Recenter</button>
+        <small id="count" class="frame-count"></small>
+      </div>
+      <div class="track"><input id="seek" type="range" min="0" value="0" aria-label="Seek through screenshots"><small id="date"></small></div>
+      <section class="info">
+        <span class="label">Current screenshot</span>
+        <h2 id="current">–</h2>
+        <p><small id="meta"></small></p>
+        <a id="external" class="action" target="_blank" rel="noopener noreferrer" hidden>Open source ↗</a>
+      </section>
+      <div class="frames" id="frames" aria-label="Chronological screenshots"></div>
+      <p class="frame-note" id="capture-count"></p>
+      <footer class="settings-note"><details><summary>About these captures</summary><p>Frames are dated by when each URL first appeared in the export. The JPEGs show the pages at capture time and are embedded for offline playback.</p></details></footer>
+    </aside>
+  </div>
+</main>
+<script id="dataset" type="application/json">/*DATA*/</script>
+<script>/*BUNDLE*/</script>
+<!--FONTS-LICENSE-->
+</body>
+</html>

@@ -1,0 +1,42 @@
+.arcade-face {
+  --face-color: #aaf0cb;
+  --rim: #6cc3a6;
+  --side: #428280;
+  --ink: #2b233b;
+  --avatar-width: 92px;
+  width: var(--avatar-width);
+  aspect-ratio: 92 / 77;
+  display: block;
+  position: relative;
+  border: calc(var(--avatar-width) * .043) solid var(--rim);
+  border-radius: calc(var(--avatar-width) * .217);
+  background: var(--face-color);
+  box-shadow: calc(var(--avatar-width) * .098) calc(var(--avatar-width) * .098) var(--side);
+  transform: rotate(8deg) skewY(-9deg);
+}
+.arcade-face--claude {
+  --face-color: #f6a77a;
+  --rim: #e88872;
+  --side: #a85a75;
+  transform: rotate(-5deg) skewY(6deg);
+}
+.arcade-face::before, .arcade-face::after {
+  content: "";
+  position: absolute;
+  background: var(--ink);
+}
+.arcade-face::before {
+  left: 23%;
+  top: 28%;
+  width: 11%;
+  height: 16%;
+  border-radius: 50%;
+  box-shadow: calc(var(--avatar-width) * .272) 0 var(--ink);
+}
+.arcade-face::after {
+  width: 29%;
+  height: 12%;
+  left: 37%;
+  top: 60%;
+  border-radius: 3px 3px 8px 8px;
+}

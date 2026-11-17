@@ -1,0 +1,20 @@
+{
+  "name": "claude-context-gallery",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "capture": "node capture-search.mjs",
+    "start": "node scripts/prepare.mjs --open",
+    "package:skill": "python3 scripts/package.py"
+  },
+  "devDependencies": {
+    "@fontsource/geist": "5.2.6",
+    "@fontsource/ibm-plex-mono": "5.2.6",
+    "esbuild": "0.25.12",
+    "playwright-core": "1.65.1"
+  },
+  "dependencies": {
+    "gpucanvas": "0.4.5"
+  }
+}

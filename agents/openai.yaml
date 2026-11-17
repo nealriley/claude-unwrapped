@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Context Gallery"
+  short_description: "Open local Claude export art and record portrait videos"
+  default_prompt: "Use $context-gallery to find my Claude export and open the local experience gallery."

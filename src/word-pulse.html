@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; base-uri 'none'; form-action 'none'">
+<title>My AI Vocabulary · Claude Context</title>
+<style>
+/*FONTS*/
+/*GPU-STYLES*/
+:root{--bg:#121c22;--panel:#1a282e;--mint:#d4dcfa;--accent-ink:#212b48;--text:#edf4ec;--muted:#acbdb7}
+:root[data-speaker=you]{--mint:#b4e7a2;--accent-ink:#192e22}
+:root[data-speaker=claude]{--mint:#ffae9e;--accent-ink:#41201e}
+body{background:radial-gradient(ellipse at 50% 47%,#24373e,var(--bg) 68%);min-height:100dvh}
+.vocabulary{--portrait-width:clamp(180px,min(calc((100dvh - 68px)*.8),calc(100vw - 550px)),760px);max-width:1620px;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,var(--portrait-width)) minmax(0,1fr);align-items:start;gap:clamp(16px,2.5vw,42px);padding:42px 21px 26px}
+.portrait{position:relative;grid-column:2;width:100%;aspect-ratio:4/5;overflow:hidden;outline:1px solid #567078;background:#172930;box-shadow:0 14px 52px #050b0f75;isolation:isolate}
+#gpu,#tiles{position:absolute;inset:0;width:100%;height:100%}
+#tiles{z-index:2;pointer-events:none}
+.opening{display:grid;position:absolute;inset:0;z-index:3;place-content:center;justify-items:center;text-align:center;padding:9%;pointer-events:none}
+.big-play{pointer-events:auto;display:grid;place-items:center;width:clamp(92px,18cqw,152px);aspect-ratio:1;border:2px solid #eef1ff;border-radius:50%;background:var(--mint);color:var(--accent-ink);box-shadow:0 0 0 10px #d4dcfa20,0 15px 55px #0004;font:600 clamp(30px,8cqw,66px)/1 var(--sans);padding:0}
+.big-play:hover{background:#e8edff}.big-play span{margin-left:.08em}
+.portrait{container-type:inline-size}
+.control-rail{grid-column:3;padding-top:12px;max-width:285px;color:var(--text)}
+.control-rail h1{font-size:clamp(27px,3.5vw,54px);letter-spacing:-.073em;line-height:1;text-wrap:balance;margin:5px 0 15px}
+.off-frame{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0 15px}
+.off-frame button{padding:6px 9px}
+.off-frame [aria-pressed=true],#transport{background:var(--mint);color:var(--accent-ink);border-color:var(--mint)}
+#transport{font-weight:600}
+#transport:hover{background:color-mix(in srgb,var(--mint),white 22%)}
+.recording-note{display:flex;align-items:center;flex-wrap:wrap;gap:6px 11px;color:var(--muted);margin:-7px 0 13px}
+#record-status[data-recording=true]{color:#ffb0a2}
+#download{color:var(--mint);font-size:12px}
+.rate{margin:0 0 14px}
+.rate-heading{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.rate output{color:var(--mint);font:12px/1.4 var(--mono);white-space:nowrap}
+.rate input{appearance:none;display:block;width:100%;height:22px;margin:0;background:none;cursor:pointer}
+.rate input::-webkit-slider-runnable-track{height:3px;background:#567078;border-radius:2px}
+.rate input::-moz-range-track{height:3px;background:#567078;border-radius:2px}
+.rate input::-webkit-slider-thumb{appearance:none;width:14px;height:14px;margin-top:-5.5px;border:0;border-radius:50%;background:var(--mint)}
+.rate input::-moz-range-thumb{width:14px;height:14px;border:0;border-radius:50%;background:var(--mint)}
+.notches{display:flex;justify-content:space-between;margin:-3px 9px 0;color:var(--muted);font:10px/1.45 var(--mono);white-space:nowrap}
+.notches span{display:grid;justify-items:center;width:0;justify-content:center}
+.notches span::before{content:"";height:4px;width:1px;background:#789196;margin-bottom:2px}
+.shuffle{display:flex;align-items:center;gap:6px;margin:0 0 14px;width:fit-content;cursor:pointer}
+.shuffle input{accent-color:var(--mint);margin:0}
+.utility{border-top:1px solid #41575f;padding-top:10px;margin:12px 0 0}
+.vocabulary details{border:1px solid #41575f;border-radius:8px;background:#19282e}
+.vocabulary summary{cursor:pointer;color:var(--text);padding:8px 11px;font-size:13px}
+.settings-body{padding:3px 11px 10px;display:grid;gap:10px}
+.settings-body label{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.settings-body small,.settings-body p{color:var(--muted)}
+.settings-body button{padding:4px 7px}
+.settings-body form{display:flex;gap:5px}
+.settings-body input[type=search]{min-width:0;width:100%;padding:4px 6px}
+.settings-body .off-frame{margin:0}
+#word-name,#find-status{overflow-wrap:anywhere}
+@media(max-width:900px){
+ .vocabulary{--portrait-width:clamp(210px,calc((100dvh - 220px)*.8),560px);grid-template-columns:minmax(0,var(--portrait-width));justify-content:center;gap:15px;padding:48px 15px 23px}
+ .portrait,.control-rail{grid-column:1}
+ .control-rail{max-width:none;padding-top:0}
+ .control-rail h1{margin:3px 0 8px;font-size:25px}
+ .off-frame{margin:5px 0 9px}
+ .recording-note{margin:0 0 10px}
+ .utility{margin-top:11px}
+ .vocabulary .label{font-size:10px}
+}
+</style>
+</head>
+<body>
+<main class="vocabulary">
+  <section class="portrait" id="field" aria-label="4 by 5 portrait word board">
+    <div id="gpu"></div><canvas id="tiles" width="1080" height="1350" aria-hidden="true"></canvas>
+    <div class="opening">
+      <button type="button" class="big-play" id="play" aria-label="Play My AI Vocabulary" disabled><span aria-hidden="true">▶</span></button>
+    </div>
+    <p class="error" id="surface-error" hidden>The canvas could not start in this browser.</p>
+  </section>
+  <aside class="control-rail" aria-label="Playback and camera controls">
+    <span class="label">Claude Context</span>
+    <h1>My AI Vocabulary</h1>
+    <div class="off-frame">
+      <button id="transport" type="button" hidden>Pause</button>
+      <button id="record" type="button" disabled>Record</button>
+    </div>
+    <div class="recording-note" id="recording-note" hidden>
+      <small id="record-status" role="status"></small>
+      <a id="download" hidden>Download video</a>
+    </div>
+    <label class="shuffle"><input id="shuffle" type="checkbox" checked> Shuffle sessions</label>
+    <div class="rate">
+      <div class="rate-heading"><label class="label" for="speed">Word speed</label><output id="word-rate" for="speed">3 words/s</output></div>
+      <input id="speed" type="range" min="0" max="6" step="1" value="1" aria-valuetext="3 words/s">
+      <div class="notches" aria-hidden="true"><span>1</span><span>3</span><span>5</span><span>8</span><span>13</span><span>21</span><span>34</span></div>
+    </div>
+    <span class="label">Camera</span>
+    <div class="off-frame" role="group" aria-label="Camera mode">
+      <button type="button" data-mode="center" aria-pressed="false" title="Center the board and stop automatic camera movement" disabled>Center</button>
+      <button type="button" data-mode="follow" aria-pressed="true" title="Follow active words and lead into nearby upcoming tiles" disabled>Follow</button>
+      <button type="button" data-mode="wander" aria-pressed="false" title="Move between random parts of the board" disabled>Wander</button>
+      <button id="zoom-out" type="button" aria-label="Zoom out" disabled>−</button>
+      <button id="zoom-in" type="button" aria-label="Zoom in" disabled>+</button>
+    </div>
+    <div class="rate">
+      <div class="rate-heading"><label class="label" for="camera-speed">Camera speed</label><output id="camera-rate" for="camera-speed">0.75×</output></div>
+      <input id="camera-speed" type="range" min="0" max="6" step="1" value="2" aria-valuetext="0.75×">
+      <div class="notches" aria-hidden="true"><span>0.25</span><span>0.5</span><span>0.75</span><span>1</span><span>1.5</span><span>2</span><span>3</span></div>
+    </div>
+    <details id="settings">
+      <summary>Settings</summary>
+      <div class="settings-body">
+        <small id="progress"></small>
+        <div><label for="find">Find a placed word</label><form id="find-form"><input id="find" type="search" name="word" autocomplete="off"><button type="submit">Find</button></form><small id="find-status" aria-live="polite"></small></div>
+        <div><strong id="word-name">Select a tile</strong><p id="word-detail"></p></div>
+        <small id="renderer">Starting GPUCanvas…</small>
+      </div>
+    </details>
+    <div class="off-frame utility">
+      <button id="step" type="button" disabled>Step</button><button id="reset" type="button" disabled>Restart</button><button id="fullscreen" type="button" hidden>Full screen</button>
+    </div>
+  </aside>
+</main>
+<script id="dataset" type="application/json">/*DATA*/</script>
+<script>/*BUNDLE*/</script>
+<!--FONTS-LICENSE-->
+</body>
+</html>

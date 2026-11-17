@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; frame-src 'self' file:; base-uri 'none'">
+<title>Claude Context Gallery</title>
+<style>
+/*FONTS*/
+:root{color-scheme:dark;--bg:#17131d;--panel:#261e30;--line:#483b54;--text:#fcf0db;--muted:#d1c0cd;--mint:#aaf0cb;--pink:#eea0be;--mono:"IBM Plex Mono",monospace;--sans:Geist,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px var(--sans)}[hidden]{display:none!important}a{color:inherit}a:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
+.shell{max-width:1290px;margin:auto;padding:37px clamp(19px,5vw,72px) 50px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.top a,.label,small{font:12px var(--mono);color:var(--muted)}
+h1{font-size:clamp(46px,7vw,96px);line-height:.95;letter-spacing:-.085em;font-weight:600;margin:35px 0 13px}
+.intro{margin:0 0 27px;color:var(--muted);font-size:17px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0}
+a.card{text-decoration:none;display:block}
+a.card:hover{border-color:#d290b2;box-shadow:0 0 0 1px #d290b2}
+.art{height:clamp(180px,25vw,310px);position:relative;overflow:hidden;display:grid;place-items:center;background:#2f233d}
+.pulse-art{background:radial-gradient(ellipse at center,#32576a,#253045 72%)}.pulse-mark{display:grid;grid-template-columns:repeat(4,36px);grid-auto-rows:30px;gap:3px;color:#e5fff5;font:13px var(--mono)}.pulse-mark b{display:grid;place-items:center;font-weight:400;background:#28655e;border:1px solid #8ed9cb}.pulse-mark b:first-child{grid-column:span 2}.pulse-mark b:nth-last-child(2){grid-column:span 2;background:#815044;border-color:#cb9069}.pulse-mark b:last-child{background:#795aa0;border-color:#d9b7ff}.film-art{background:radial-gradient(ellipse at center,#644d52,#352c43 74%)}.film-mark{width:128px;height:76px;display:block;background:linear-gradient(#ad7370 0 15%,#e9c5a3 15%);border:3px solid #ffd0a1;border-radius:7px;box-shadow:-14px 9px #72555c,14px -8px #986d66}
+.info{padding:14px 15px 17px}.info h2{margin:0 0 5px;font-size:24px;letter-spacing:-.05em}.info p{margin:0;color:var(--muted);font-size:14px}
+.badge{display:block;margin-bottom:5px;color:var(--mint)}
+.gallery-footer{margin-top:20px;color:var(--muted);font:12px var(--mono)}
+.viewer{display:grid;grid-template-rows:auto minmax(0,1fr);height:100dvh}
+.viewer-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:54px;padding:8px clamp(12px,4vw,48px);background:#241b2f;border-bottom:1px solid var(--line)}
+.viewer-bar a{text-decoration:none;padding:6px 8px;border:1px solid var(--line);border-radius:5px;font:12px var(--mono);white-space:nowrap}
+.viewer-bar a:hover{background:#3f304e}.viewer h2{margin:0;font-size:15px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.viewer--immersive{grid-template-rows:minmax(0,1fr)}
+.viewer--immersive .viewer-bar{position:fixed;inset:10px auto auto 10px;min-height:0;padding:0;display:flex;gap:5px;background:none;border:0;z-index:10;pointer-events:none}
+.viewer--immersive .viewer-bar h2,.viewer--immersive #standalone{display:none}
+.viewer--immersive .viewer-bar a,.viewer--immersive .viewer-bar button{pointer-events:auto;background:#241d2ae8;color:var(--text);padding:5px 7px;border:1px solid #766783a1;border-radius:6px;font:11px var(--mono);cursor:pointer}
+.viewer--immersive .viewer-bar a:hover,.viewer--immersive .viewer-bar button:hover{background:#43344c}
+.viewer iframe{border:0;width:100%;height:100%;display:block;background:#1b1527}.frame-host{min-height:0}
+
+@media(max-width:590px){.shell{padding-top:24px}.cards{grid-template-columns:1fr}.viewer h2{font-size:12px}}
+</style>
+</head>
+<body>
+<main class="shell" id="gallery">
+  <div class="top"><span class="label">CLAUDE CONTEXT</span><a href="docs/README.md">Local docs ↗</a></div>
+  <h1 id="gallery-heading" tabindex="-1">Experience Gallery</h1>
+  <p class="intro">Explore your Claude archive through vocabulary and search history.</p>
+  <div class="cards">
+    <a class="card" href="#my-ai-vocabulary">
+      <div class="art pulse-art" aria-hidden="true"><div class="pulse-mark"><b>word</b><b>by</b><b>it</b><b>is</b><b>again</b><b>the</b></div></div>
+      <div class="info"><small class="badge">GPUCANVAS</small><h2>My AI Vocabulary</h2><p>Replay your sessions as a portrait mosaic of words.</p></div>
+    </a>
+    <a class="card" href="#search-filmstrip">
+      <div class="art film-art" aria-hidden="true"><div class="film-mark"></div></div>
+      <div class="info"><small class="badge">GPUCANVAS</small><h2>Search Filmstrip</h2><p>Replay locally captured search results in the order they appeared.</p></div>
+    </a>
+  </div>
+  <p class="gallery-footer"><a href="docs/experiences.md">Experience backlog ↗</a></p>
+</main>
+<section class="viewer" id="viewer" hidden>
+  <div class="viewer-bar">
+    <a href="#" id="back">← Gallery</a>
+    <button id="gallery-fullscreen" type="button" aria-label="Toggle full screen" title="Toggle full screen" hidden>⛶</button>
+    <h2 id="experience-title"></h2>
+    <a id="standalone" target="_blank" rel="noopener">Open on its own ↗</a>
+  </div>
+  <div class="frame-host" id="frame-host"></div>
+</section>
+<script>
+const experiences = new Map([
+  ['my-ai-vocabulary', ['My AI Vocabulary', './word-pulse.html']],
+  ['search-filmstrip', ['Search Filmstrip', './search-filmstrip.html']],
+])
+const gallery = document.getElementById('gallery')
+const viewer = document.getElementById('viewer')
+const host = document.getElementById('frame-host')
+const full = document.getElementById('gallery-fullscreen')
+function toggleFullscreen() {
+  const action = document.fullscreenElement ? document.exitFullscreen() : viewer.requestFullscreen()
+  action.catch(() => { full.title = 'Full screen is unavailable in this browser' })
+}
+full.addEventListener('click', toggleFullscreen)
+let current
+function showSelected() {
+  const hash = location.hash.slice(1)
+  const id = hash === 'word-pulse' ? 'my-ai-vocabulary' : hash
+  const experience = experiences.get(id)
+  const previous = current
+  if (previous === id) return
+  current = id
+  gallery.hidden = Boolean(experience)
+  viewer.hidden = !experience
+  host.replaceChildren()
+  viewer.classList.toggle('viewer--immersive', Boolean(experience))
+  full.hidden = !experience || id==='my-ai-vocabulary' || !document.fullscreenEnabled
+  if (!experience && document.fullscreenElement === viewer) document.exitFullscreen().catch(() => {})
+  if (!experience) {
+    document.title = 'Claude Context Gallery'
+    const trigger = [...gallery.querySelectorAll('.card[href]')].find(card => card.hash === '#' + previous)
+    if (previous) (trigger || document.getElementById('gallery-heading')).focus()
+    return
+  }
+  const [title, path] = experience
+  document.title = title + ' · Claude Context Gallery'
+  document.getElementById('experience-title').textContent = title
+  document.getElementById('standalone').href = path
+  const frame = document.createElement('iframe')
+  frame.title = title
+  frame.allowFullscreen = id==='my-ai-vocabulary'
+  frame.src = path
+  host.append(frame)
+  if (previous !== undefined) document.getElementById('back').focus()
+}
+addEventListener('hashchange', showSelected)
+showSelected()
+</script>
+<!--FONTS-LICENSE-->
+</body>
+</html>

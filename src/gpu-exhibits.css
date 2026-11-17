@@ -1,0 +1,58 @@
+:root{color-scheme:dark;--bg:#11191e;--panel:#19252c;--line:#354652;--ink:#eaf5f4;--muted:#adc1c7;--mint:#92e7d8;--peach:#ffa981;--mono:"IBM Plex Mono",monospace;--sans:Geist,system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.46 var(--sans)}
+[hidden]{display:none!important}
+main{max-width:1500px;margin:auto;padding:20px clamp(15px,4vw,48px) 27px}
+h1,h2,p{margin:0}
+h1{font-size:clamp(38px,5.1vw,69px);line-height:.96;letter-spacing:-.078em;font-weight:600}
+h2{font-size:17px;letter-spacing:-.028em}
+.mono,small,.label{font:11px/1.45 var(--mono)}
+.label{color:var(--muted);text-transform:uppercase;letter-spacing:.085em}
+header{display:flex;justify-content:space-between;align-items:end;gap:14px;margin:10px 0 15px}
+header p{margin-top:6px;color:var(--muted)}
+#renderer{color:var(--mint);white-space:nowrap}
+button,select,input,a.action{font:inherit;color:var(--ink);min-width:0}
+button,select,input[type=search],a.action{background:#25353e;border:1px solid #4a616e;border-radius:6px;padding:6px 9px}
+button,a.action{cursor:pointer;text-decoration:none}
+button:hover,a.action:hover{background:#344752}
+button:disabled{cursor:default;opacity:.5}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+button.primary{background:var(--mint);border-color:var(--mint);color:#172b2d;font-weight:600;min-width:68px}
+button.primary:hover{background:#b6f4e8}
+.shell{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:10px 13px;border-bottom:1px solid var(--line)}
+.controls label{display:inline-flex;white-space:nowrap;align-items:center;gap:5px}
+.controls select{padding:5px}
+.controls .far{margin-left:auto}
+.track{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid var(--line)}
+.track input{flex:1;accent-color:var(--mint);min-width:50px}
+.track small{color:var(--muted);white-space:nowrap}
+footer{color:var(--muted);font-size:12px;margin-top:13px}
+footer summary{cursor:pointer;color:var(--ink);width:fit-content}
+footer p{max-width:900px;margin-top:5px}
+.error{position:absolute;z-index:5;left:12px;top:12px;background:#251d2d;padding:12px;border-radius:6px;color:var(--ink)}
+@media(max-width:710px){header{display:block}#renderer{display:block;margin-top:7px}.controls .far{margin-left:0}.track{gap:5px}.track small{font-size:10px}}
+.immersive{width:100%;height:100dvh;max-width:none;padding:0;position:relative;overflow:hidden}
+.immersive .workspace{display:block;width:100%;height:100%}
+.immersive .canvas-shell{position:absolute;inset:0;border:0;border-radius:0;background:none}
+.immersive .field{position:absolute;inset:0;width:100%;height:100%;min-height:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.overlay-controls{position:absolute;inset:auto 13px 13px;z-index:7;display:flex;justify-content:space-between;pointer-events:none;align-items:center;gap:8px}
+.overlay-controls button{pointer-events:auto;box-shadow:0 2px 10px #0004}
+.overlay-controls .primary{background:#21383ee8;color:var(--mint);border-color:#7ea7a685}
+.overlay-controls .primary:hover{background:#33535b}
+.overlay-controls #settings-toggle{background:#1f2831ed}
+.overlay-controls #settings-toggle:hover{background:#39505a}
+.settings-panel{position:absolute;z-index:8;right:13px;bottom:56px;width:min(354px,calc(100% - 26px));max-height:calc(100% - 112px);overflow:auto;background:var(--panel);box-shadow:0 12px 30px #0007}
+.settings-head{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:11px 12px;border-bottom:1px solid var(--line)}
+.settings-head #renderer{white-space:normal}
+.settings-head button{flex:none;padding:4px 7px}
+.settings-panel .controls select{max-width:100%;font-size:12px}
+.settings-panel .controls .far{margin:0}
+.settings-panel .track{border-block:1px solid var(--line)}
+.settings-panel .settings-note{margin:0;padding:8px 12px;color:var(--muted)}
+.settings-panel .frames{height:clamp(127px,30vh,275px)}
+.immersive .field-label{top:12px;left:auto;right:14px}
+.immersive .actor-key{right:94px;bottom:19px}
+.immersive .error{top:56px}
+@media(max-width:490px){.overlay-controls{inset:auto 8px 8px}.settings-panel{right:8px;bottom:49px;width:min(354px,calc(100% - 16px))}.immersive .field-label{display:none}.immersive .actor-key{right:84px;bottom:13px}}
