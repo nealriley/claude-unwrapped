@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict'
 import {test} from 'node:test'
-import {mkdtemp,readFile,mkdir,rm,stat} from 'node:fs/promises'
+import {mkdtemp,readFile,mkdir,rm,stat,readdir,writeFile,copyFile} from 'node:fs/promises'
 import {join} from 'node:path'
+import {pathToFileURL} from 'node:url'
 import {tmpdir} from 'node:os'
 import {spawnSync} from 'node:child_process'
 import {root,runner,fixture,run} from './helpers.mjs'
@@ -116,4 +117,75 @@ test('capture setup failure is reported while vocabulary remains available',asyn
   assert.equal(output.eligible_search_results,1)
   assert.equal(output.screenshots,0)
   assert.match(output.capture_status,/failed/i)
+})
+
+test('local manifest import resumes verified downloads, then reuses the data without the source files',async t=>{
+  const cwd = await temporary(t)
+  const fixtures = join(cwd,'fixtures')
+  const workspace = join(cwd,'claude-context-art')
+  const exports = join(workspace,'exports')
+  await mkdir(fixtures)
+  await mkdir(exports,{recursive:true})
+  const archives = [0,1,2].map(index=>fixture(fixtures,index))
+  const filenames = archives.map((_,index)=>'conversations-00'+index+'.zip')
+  const urls = filenames.map((_,index)=>'https://claude.ai/export/test-batch/download/fixture-token-'+index)
+  const manifest = join(exports,'export.json')
+  await writeFile(manifest,JSON.stringify({total_files:3,data_files:filenames.map((filename,i)=>({
+    filename,export_url:i===0?'[Export file]('+urls[i]+')':urls[i],
+  }))}))
+  const mock = join(cwd,'mock-fetch.mjs')
+  const requests = join(cwd,'requests')
+  await writeFile(mock,`
+    import {appendFile,readFile} from 'node:fs/promises'
+    const fetchNetwork = globalThis.fetch
+    globalThis.fetch = async (target,options)=>{
+      const url = new URL(target)
+      if (url.hostname==='127.0.0.1') return fetchNetwork(target,options)
+      const index = ${JSON.stringify(urls)}.indexOf(url.href)
+      if (index<0 || options.redirect!=='manual') throw new Error('Unexpected request')
+      await appendFile(${JSON.stringify(requests)},String(index))
+      if (index===1) return new Response('Sign in',{status:403})
+      const bytes = await readFile(${JSON.stringify(archives)}[index])
+      return new Response(index===2 && !process.env.TEST_CONTINUE ? bytes.subarray(0,10) : bytes)
+    }
+  `)
+  const args = ['--import',pathToFileURL(mock).href,runner,'--workspace='+workspace]
+  const pending = JSON.parse(run(process.execPath,args,{cwd}))
+  assert.equal(pending.status,'download_pending')
+  assert.deepEqual(pending.pending_files,filenames.slice(1))
+  assert.deepEqual(await readdir(pending.exports),[filenames[0]])
+  assert.equal((await stat(join(pending.exports,filenames[0]))).mode & 0o777,0o600)
+  await assert.rejects(stat(join(workspace,'data/sessions.json')),{code:'ENOENT'})
+  await copyFile(archives[1],join(pending.exports,filenames[1]))
+
+  const retry = run(process.execPath,[...args,'--manifest='+manifest],{cwd,env:{...process.env,TEST_CONTINUE:'1'}})
+  assert.ok(!retry.includes('fixture-token'))
+  const ready = JSON.parse(retry)
+  const state = JSON.parse(await readFile(join(ready.workspace,'.server.json'),'utf8'))
+  t.after(()=>{try {process.kill(state.pid)} catch {}})
+  assert.equal(ready.status,'ready')
+  assert.equal(ready.sessions,3)
+  assert.equal(ready.tokens,15)
+  assert.deepEqual((await readFile(requests,'utf8')).split('').sort(),['0','1','2','2'])
+  assert.ok(!(await readFile(join(ready.data,'manifest.json'),'utf8')).includes('fixture-token'))
+
+  await rm(exports,{recursive:true})
+  const cached = JSON.parse(run(process.execPath,args,{cwd}))
+  assert.equal(cached.reused,true)
+  assert.equal(cached.gallery,ready.gallery)
+  assert.equal((await (await fetch(new URL('/data/vocabulary.json',cached.gallery))).json()).tokens,15)
+})
+
+test('an explicit manifest rejects unexpected hosts and unsafe filenames',async t=>{
+  const cwd = await temporary(t)
+  const path = join(cwd,'manifest.json')
+  for (const [filename,export_url,expected] of [
+    ['conversations-000.zip','https://example.com/export/test-batch/download/token',/Claude export page/],
+    ['../conversations-000.zip','https://claude.ai/export/test-batch/download/token',/invalid filename/],
+  ]) {
+    await writeFile(path,JSON.stringify({total_files:1,data_files:[{filename,export_url}]}))
+    const result = spawnSync(process.execPath,[runner,'--manifest='+path],{cwd,encoding:'utf8'})
+    assert.equal(result.status,1)
+    assert.match(result.stderr,expected)
+  }
 })

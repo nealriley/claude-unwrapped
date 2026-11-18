@@ -23,11 +23,12 @@ def run():
     parser.add_argument('--workspace', type=Path, required=True)
     parser.add_argument('--search', action='append', default=[])
     parser.add_argument('--export', dest='source', type=Path)
+    parser.add_argument('--archive', action='append', type=Path)
     args = parser.parse_args()
     workspace = args.workspace.expanduser().resolve()
     exports = workspace / 'exports'
     exports.mkdir(parents=True, exist_ok=True, mode=0o700)
-    files = export_files(args.source) if args.source else discover([exports, *args.search])
+    files = args.archive or (export_files(args.source) if args.source else discover([exports, *args.search]))
     if not any(compatible(path) for path in files):
         print(json.dumps({'status': 'missing', 'exports': str(exports), 'settings_url': 'https://claude.ai/settings/privacy',
                           'help_url': 'https://support.claude.com/en/articles/9450526-export-your-claude-data'}))

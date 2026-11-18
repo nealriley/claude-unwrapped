@@ -14,7 +14,7 @@ Enable code execution in Claude, then choose either installation route.
 1. Open **Customize → Plugins → Add → Add marketplace**.
 2. Choose **Add from a repository** and enter `nealriley/claude-unwrapped`.
 3. Install **Claude Unwrapped** and enable it.
-4. Ask Claude, “Use Claude Unwrapped to turn my Claude export into a downloadable gallery.”
+4. In a local Code session, ask Claude to open your Claude Unwrapped gallery. In Chat or Cowork, ask for a downloadable gallery.
 
 The plugin's skill is available as `/agent-unwrapped:context-gallery` where Claude supports namespaced commands. Marketplace installations can use **Check for updates** and **Sync automatically** where available.
 
@@ -29,7 +29,7 @@ For manual installations, upload the newer release ZIP when you want to update. 
 
 ## Use in Desktop or Cowork
 
-Attach your Claude export ZIP, or connect the folder holding it. If you need an export, the skill points you to **Settings → Privacy → Export data** and helps you locate a folder for the download.
+Attach your downloaded Claude export ZIPs, or connect the folder holding them. If you need an export, the skill points you to **Settings → Privacy → Export data** and helps you locate a folder for the download.
 
 Claude processes the supplied export in its execution environment and produces **claude-unwrapped-gallery.zip**. Download and extract it, then open **claude-unwrapped/index.html** in Chrome. Both experience pages embed their playback data and assets. The archive also contains normalized JSON and any successful screenshot captures.
 
@@ -47,13 +47,18 @@ Install from the same repository in Claude Code.
 /agent-unwrapped:context-gallery
 ```
 
-To run directly, install Node.js 20+ and Python 3. Use the runner's absolute path from the directory where your data should live.
+Choose a local session in the Claude Desktop Code tab or run Claude Code on your computer. The skill checks the chosen claude-context-art workspace for an existing import and opens it in Chrome. Repeat invocations use the same workspace.
+
+On a first run, put the JSON manifest from Claude's emailed export link in the workspace's exports folder or in Downloads. The runner downloads the ZIPs listed in the manifest into a separate folder for that export and imports them when all are verified. If Chrome sign-in is needed, use the original manifest to save the remaining parts into the folder named by the runner, then repeat the command. Keep the filenames listed in the manifest.
+
+You can run the same workflow directly with Node.js 20+ and Python 3.
 
 ```sh
-node /absolute/path/to/claude-unwrapped/scripts/prepare.mjs --open --capture
+node /absolute/path/to/claude-unwrapped/scripts/prepare.mjs \
+  --workspace="/absolute/path/to/claude-context-art" --open --capture-on-import
 ```
 
-Local mode creates a claude-context-art workspace and opens a loopback viewer in Chrome. Specify an export file or folder with `--export=/absolute/path`, or select the output workspace with `--workspace=/absolute/path`. PYTHON_BIN and CHROME_BIN select alternate executables. The viewer's process details are stored in the workspace's .server.json file. Rerunning reuses or restarts the viewer.
+Use `--manifest=/absolute/path/to/export.json` for a particular manifest, `--export=/absolute/path` for existing ZIPs, or `--refresh` to search again. The viewer serves the gallery on 127.0.0.1. PYTHON_BIN and CHROME_BIN select alternate executables. Viewer process details are in the workspace's .server.json file.
 
 Generate a downloadable gallery directly with the artifact mode.
 

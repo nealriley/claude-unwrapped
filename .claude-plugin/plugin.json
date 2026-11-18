@@ -1,7 +1,7 @@
 {
   "name": "agent-unwrapped",
   "displayName": "Claude Unwrapped",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Turn your Claude export into a vocabulary mosaic and search filmstrip, ready to open in Chrome and record as a portrait video.",
   "author": {
     "name": "Neal Riley"
